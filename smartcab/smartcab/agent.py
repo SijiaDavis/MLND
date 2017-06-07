@@ -42,7 +42,7 @@ class LearningAgent(Agent):
         if testing:
             self.epsilon = 0.0
             self.alpha = 0.0
-        elif self.epsilon > 0.01:
+        else:
             self.epsilon = self.epsilon - 0.05
 
         return None
@@ -63,6 +63,7 @@ class LearningAgent(Agent):
         # Set 'state' as a tuple of relevant data for the agent        
         # state = ' '.join([waypoint, inputs['light'], str(inputs['left']), str(inputs['right']), str(inputs['oncoming'])])
         state = ' '.join([waypoint, inputs['light']])
+        # state = ' '.join([waypoint, inputs['light'], str(inputs['oncoming'])])
 
         return state
 
