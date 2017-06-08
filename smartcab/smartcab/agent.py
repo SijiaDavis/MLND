@@ -8,7 +8,7 @@ class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
         This is the object you will be modifying. """ 
 
-    def __init__(self, env, learning=True, epsilon=1.0, alpha=0.5):
+    def __init__(self, env, learning=True, epsilon=1.0, alpha=0.95):
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment 
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
@@ -23,6 +23,7 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set any additional class parameters as needed
+        self.trial_cnt = 1
 
 
     def reset(self, destination=None, testing=False):
@@ -43,7 +44,10 @@ class LearningAgent(Agent):
             self.epsilon = 0.0
             self.alpha = 0.0
         else:
-            self.epsilon = self.epsilon - 0.05
+            # self.epsilon = self.epsilon - 0.05
+            self.epsilon = self.alpha ** self.trial_cnt
+        
+        self.trial_cnt = self.trial_cnt + 1
 
         return None
 
@@ -61,9 +65,9 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set 'state' as a tuple of relevant data for the agent        
-        # state = ' '.join([waypoint, inputs['light'], str(inputs['left']), str(inputs['right']), str(inputs['oncoming'])])
-        state = ' '.join([waypoint, inputs['light']])
-        # state = ' '.join([waypoint, inputs['light'], str(inputs['oncoming'])])
+        # state = ' '.join([waypoint, inputs['light'], str(inputs['left']), str(inputs['oncoming'])])
+        # state = ' '.join([waypoint, inputs['light']])
+        state = ' '.join([waypoint, inputs['light'], str(inputs['oncoming'])])
 
         return state
 
@@ -118,7 +122,7 @@ class LearningAgent(Agent):
         else:
             # When learning, choose a random action with 'epsilon' probability
             #   Otherwise, choose an action with the highest Q-value for the current state
-            if self.epsilon >= 0.01:
+            if random.random() < self.epsilon:
                 # choose a random action
                 action = random.choice(self.valid_actions)
             else:
