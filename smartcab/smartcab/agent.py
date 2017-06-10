@@ -128,8 +128,14 @@ class LearningAgent(Agent):
             else:
                 # choose an action with the highest Q-value for the current state
                 print "maximum Q-value is " + str(self.get_maxQ(state))
-                action = max(self.Q[state], key=self.Q[state].get)
- 
+                max_q = self.get_maxQ(state)
+                
+                actions = []
+                for ac, val in self.Q[state].iteritems():
+                    if val == max_q:
+                        actions.append(ac)
+                action = random.choice(actions)
+                
         return action
 
 
